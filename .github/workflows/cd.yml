@@ -13,14 +13,13 @@ permissions:
 
 jobs:
   deploy:
-    if: >-
-      ${{
-        (
-          github.event_name == 'workflow_dispatch' ||
-          github.event.workflow_run.conclusion == 'success'
-        ) &&
-        vars.DEPLOY_ENABLED == 'true'
-      }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug trigger
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Deploy enabled: ${{ vars.DEPLOY_ENABLED }}"
+          echo "CI conclusion: ${{ github.event.workflow_run.conclusion }}"
     runs-on: ubuntu-latest
 
     steps:
