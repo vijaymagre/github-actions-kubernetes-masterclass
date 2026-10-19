@@ -14,16 +14,20 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Debug trigger
         run: |
           echo "Event: ${{ github.event_name }}"
           echo "Deploy enabled: ${{ vars.DEPLOY_ENABLED }}"
           echo "CI conclusion: ${{ github.event.workflow_run.conclusion }}"
-    runs-on: ubuntu-latest
 
-    steps:
       - name: Deploy to EC2
+        if: >-
+          ${{
+            github.event_name == 'workflow_dispatch' ||
+            github.event.workflow_run.conclusion == 'success'
+          }}
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
